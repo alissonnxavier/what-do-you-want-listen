@@ -9,3 +9,8 @@ body,
   background-color: black;
   color-scheme: dark;
 }
+
+::selection{
+  background-color: #17cf26;
+  color: #2d332d;
+}
