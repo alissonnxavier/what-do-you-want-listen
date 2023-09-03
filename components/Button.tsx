@@ -29,11 +29,19 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
             hover:opacity-75
             transition
             hover:shadow-lg hover:shadow-green-500/50
-            `, className)}
+            `,
+                disabled && 'opacity-75 cursor-not-allowed',
+                className
+            )}
+            disabled={disabled}
+            ref={ref}
+            {...props}
         >
             {children}
         </button>
-    )
-})
+    );
+});
+
+Button.displayName = 'Button;'
 
 export default Button

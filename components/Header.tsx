@@ -6,6 +6,11 @@ import { RxCaretLeft, RxCaretRight } from 'react-icons/rx';
 import { HiHome } from "react-icons/hi";
 import { BiSearch } from "react-icons/bi";
 import Button from "./Button";
+import useAuthModal from "@/hooks/useAuthModal";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useUser } from "@/hooks/useUser";
+import { FaUserAlt } from "react-icons/fa";
+import { toast } from "react-hot-toast";
 
 
 interface HeaderProps {
@@ -15,10 +20,35 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ children, className }) => {
 
+    const authModal = useAuthModal();
     const router = useRouter();
 
-    const handleLogout = () => {
-        //Hadle logout in the future;
+    const supabaseClient = useSupabaseClient();
+    const { user } = useUser();
+
+    const handleLogout = async () => {
+
+        const { error } = await supabaseClient.auth.signOut();
+        // TODO Reset any playing song;
+
+        router.refresh();
+
+        if (error) {
+            toast.error(error.message);
+        } else {
+            toast.success('Logout success', {
+                style: {
+                    border: '1px solid green',
+                    padding: '16px',
+                    color: '#fff',
+                },
+                iconTheme: {
+                    primary: 'green',
+                    secondary: '#FFFAEE',
+                },
+
+            });
+        }
     };
 
     return (
@@ -104,32 +134,57 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
                         gap-x-4
                     "
                 >
-                    <>
-                        <div>
+                    {user ? (
+                        <div className="flex gap-x-4 items-center ">
                             <Button
-                                onClick={() => { }}
+                                onClick={handleLogout}
                                 className="
+                                  bg-white
+                                    px-6
+                                    py-2 
+                                    hover:shadow-lg
+                                  hover:shadow-red-500
+                                  hover:text-red-500
+                                  hover:border-red-600
+                                "
+                            >
+                                Logout
+                            </Button>
+                            <Button
+                                className="bg-white"
+                                onClick={() => router.push('/account')}
+                            >
+                                <FaUserAlt />
+                            </Button>
+                        </div>
+                    ) : (
+                        <>
+                            <div>
+                                <Button
+                                    onClick={authModal.onOpen}
+                                    className="
                                     bg-transparent
                                     text-neutral-300
                                     font-medium
                                 "
-                            >
-                                Sign Up
-                            </Button>
-                        </div>
-                        <div>
-                            <Button
-                                onClick={() => { }}
-                                className="
+                                >
+                                    Sign up
+                                </Button>
+                            </div>
+                            <div>
+                                <Button
+                                    onClick={authModal.onOpen}
+                                    className="
                                     bg-white
                                     px-6
                                     py-2
                                 "
-                            >
-                                Log in
-                            </Button>
-                        </div>
-                    </>
+                                >
+                                    Log in
+                                </Button>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
             {children}
