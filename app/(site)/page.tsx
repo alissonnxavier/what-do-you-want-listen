@@ -11,6 +11,8 @@ export default async function Home() {
   const songs = await getSongs();
 
   return (
+
+
     <div className="
       bg-neutral-900
       rounded-lg
@@ -20,6 +22,7 @@ export default async function Home() {
       overflow-y-auto
     ">
       <Header>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <div>
           <h1
             className="
@@ -56,7 +59,7 @@ export default async function Home() {
           </h1>
         </div>
         <div>
-          <PageContent songs={songs}/>
+          <PageContent songs={songs} />
         </div>
       </div>
     </div>

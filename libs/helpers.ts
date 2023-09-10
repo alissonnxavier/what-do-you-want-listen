@@ -12,7 +12,7 @@ export const getURL = () => {
     return url;
 };
 
-export const portData = async ({
+export const postData = async ({
     url,
     data,
 }: {

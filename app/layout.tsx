@@ -13,6 +13,7 @@ import getActiveProductsWithPrices from '@/actions/getActiveProductsWithPrices'
 const font = Figtree({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  icons: '/favicon.icon',
   title: 'Spotify Clone',
   description: 'Listen to music!',
 }
@@ -30,11 +31,12 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <link rel="icon" href="/favicon.ico" sizes="any" />
       <body className={font.className}>
         <ToastProvider />
         <SupabaseProvider>
           <UserProvider>
-            <ModalProvider />
+            <ModalProvider products={products}/>
             <Sidebar songs={userSongs}>
               {children}
             </Sidebar>
